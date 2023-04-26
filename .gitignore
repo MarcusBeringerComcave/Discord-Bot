@@ -1,0 +1,7 @@
+discordbot
+.env
+.ssh/authorized_keys
+backup/ideen.txt
+backup/orte.txt
+backup/rooms.txt
+backup/bot.py
