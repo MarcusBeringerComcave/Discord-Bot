@@ -84,19 +84,22 @@ async def listunregistered(ctx):                                                
         if len(user.roles) == 1:                                                #  check if user just have the everyone role
             await ctx.send(f'{user.name}#{user.discriminator}\n')               #  write down all users with only the everyone role
 #  ask user for issues
-@client.command(pass_context = True, aliases = ['ask'])
-@commands.has_role('Administrator')
-async def askissues(ctx):
-    if ctx.author.bot:
-        return
-    guild = ctx.guild
-    for member in guild.members:
+@client.command(pass_context = True, aliases = ['ask'])                         #  create a command with alias (useage: !ask)
+@commands.has_role('Administrator')                                             #  check role of the user, command only allowed for specified role, in this case Administrator
+async def askissues(ctx):                                                      #  defining function
+    guild = ctx.guild                                                           #  get the guild from where the user is wrinting for content using
+    user = ctx.author                                                           #  get the user who wrote the message
+    if user == client.user:                                                     #  if the wirte is the bot itself, then exit this function
+        return                                                                  #  the exit point
+    for member in guild.members:                                                #  for every user in this guild
+        #  check if member is an instance of guild members and if message is not sent to specifies users
         if isinstance(member, discord.Member) and member.name != 'Sandro Simperl' and member.name != 'ComCave' and member.name != 'Bot':
+            #  set message
             message = f'{member.mention}\n```Ich hoffe Du kannst einen positiven Nutzen aus unserem Server ziehen.\n\nIch möchte hiermit die Gelegenheit nutzen,\nDich zu fragen ob bis jetzt alles in Ordnung ist.\n\nEs würde mich freuen, wenn Du mir mitteilst, was ich ändern oder anpassen soll.\nIch bin für jede Kritik oder jedes Feedback, dankbar.\n\nDu kannst:\n　　　　direkt antworten\n　　　　dem User "Sandro Simperl#5764" (Tag unten) eine Nachricht senden\n　　　　per Email an "sandrosimperl.cc@outlook.de" eine Nachricht senden\n　　　　oder auf dem Server per Feedback Befehl:\n　　　　　　　　!feedback DEINE MEINUNG\n\nIch danke Dir bereit jetzt für das teilnehmen und Deinen Mühen.\n```\n<@{762078856659730482}>\n'
-            try:
+            try:                                                                #  try sending message
                 await member.send(message)
-            except discord.Forbidden:
-                admin = await ctx.bot.fetch_user(762078856659730482)
+            except discord.Forbidden:                                           #  if not sendable, then send admin a message
+                admin = await ctx.bot.fetch_user(762078856659730482)            #  define admin user and sent the message
                 await admin.send(f'Fehler: Nachricht konnte nicht an {member.name} gesendet werden.')
 
 #  get a feedback
